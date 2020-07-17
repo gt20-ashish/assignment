@@ -10,27 +10,57 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    
+    <style>
+        .loader {
+          border: 12px solid #f3f3f3;
+          border-radius: 50%;
+          border-top: 12px solid #3498db;
+          width: 60px;
+          height: 60px;
+          -webkit-animation: spin 2s linear infinite; /* Safari */
+          animation: spin 2s linear infinite;
+          display: none;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+        }
+        
+        /* Safari */
+        @-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>        
 </head>
 <body>
+    
 	<div class="container">
+        
 		<div class="row">
 			<div class="col-sm-12">
                 <h1 class="text-center" style="margin-top: 50px;">User API</h1>
                 <div class="form-group col-sm-3 col-sm-offset-9">
                     <input type="text" class="form-control" id="search" placeholder="search by users">
                 </div>
-                
-                <table class="table table-hover table-striped" style="margin-top: 30px;" id="usersTable">
-                    <thead>
-                        <th></th>
-                        <th>Name</th>
-                        <th>UserName</th>
-                        <th>Email</th>
-                        <th>Info</th>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div>
+                    <div class="loader" id="loader1"></div>
+                    <table class="table table-hover table-striped" style="margin-top: 30px;" id="usersTable">
+                        <thead>
+                            <th></th>
+                            <th>Name</th>
+                            <th>UserName</th>
+                            <th>Email</th>
+                            <th>Info</th>
+                        </thead>
+                        <tbody></tbody>
+                        
+                    </table>
+                </div>
                 <div class="form-group col-sm-2 col-sm-offset-10">
                     <input type="button" class="form-control btn btn-primary" id="savebtn" value="Save">
                 </div>
@@ -43,12 +73,13 @@
     
       <!-- Modal content-->
       <div class="modal-content">
+        <div class="loader" id="loader2"></div>
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">User Information</h4>
         </div>
         <div class="modal-body">
-         
+            
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -63,6 +94,9 @@
             // Ajax Call to Show User List
 			$.ajax({
                 url:"https://jsonplaceholder.typicode.com/users",
+                beforeSend: function(){
+                    $("#loader1").show();
+                },
                 success:function(result,status,xhr){
                     var tableContent ="";
                     if(result.length==0){
@@ -80,6 +114,9 @@
                         tableContent+="</tr>";
                     });
                     $("#usersTable tbody").append(tableContent);
+                },
+                complete: function(){
+                    $("#loader1").hide();
                 },
                 error:function(xhr,status,error){
                     alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
@@ -101,6 +138,9 @@
                 $('.modal-body').html(modalContent);
                 $.ajax({
                    url:"https://jsonplaceholder.typicode.com/users/"+id,
+                   beforeSend: function(){
+                    $("#loader2").show();
+                   },
                    success:function(result,status,xhr){
                         modalContent+="<div class='row'>";
                         modalContent+="<div class='col-sm-2'><label>Name:</label></div><div class='col-sm-9'>"+result.name+"</div>";
@@ -125,7 +165,10 @@
                         modalContent+="</div>";
                         
                         $('.modal-body').html(modalContent);
-                   } 
+                   },
+                   complete: function(){
+                        $("#loader2").hide();
+                   }
                 });
                 $('#myModal').modal('show'); 
             });
