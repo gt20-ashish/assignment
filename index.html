@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Assignment</title>
+	<!-- Latest compiled and minified CSS -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+                <h1>User API</h1>
+                <table>
+                    <thead>
+                        <th></th>
+                        <th>Name</th>
+                        <th>UserName</th>
+                        <th>Email</th>
+                        <th>Info</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+			</div>
+		</div>	
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$.ajax({
+                url:"https://jsonplaceholder.typicode.com/users",
+                success:function(result,status,xhr){
+                    console.log(result);
+                    console.log(status);
+                    console.log(xhr);
+                },
+                error:function(xhr,status,error){
+                    console.log(xhr);
+                    console.log(status);
+                    console.log(error);
+                }
+            });
+		});
+	</script>
+</body>
+</html>
